@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -52,10 +53,9 @@ class LoginView extends StatelessWidget {
         color: colorScheme.background,
         child: Column(
           children: [
-            Expanded(
-              child: Center(
-                child: Image.asset(logo, width: 200), // Replace with your logo asset path
-              ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+            Center(
+              child: Image.asset(logo, width: 200), // Replace with your logo asset path
             ),
             Expanded(
               flex: 2,
@@ -79,52 +79,55 @@ class LoginView extends StatelessWidget {
                               hint: "Please enter your Password",
                               icon: Icons.lock, // Add lock icon
                             ),
-                            SizedBox(height: 16),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  // TODO: Implement forgot password functionality
-                                  Get.to(HomeView());
-                                },
-                                child: Text(
-                                  "Forgot Password",
-                                  style: TextStyle(
-                                    color: colorScheme.secondary,
-                                    fontWeight: FontWeight.bold,
+
+                            SizedBox(height: 32),
+
+                            AnimatedLoginButton(), // Use the AnimatedLoginButton class from earlier
+                            SizedBox(height: 32),
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     Get.to(() => const SignupView());
+                            //   },
+                            //   child: Text('Sign Up'),
+                            //   style: ElevatedButton.styleFrom(
+                            //     foregroundColor: colorScheme.onPrimary, backgroundColor: colorScheme.primary,
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(30.0),
+                            //     ),
+                            //     padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+                            //   ),
+                            // ),0
+                            // SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Get.to(HomeView());
+                                  },
+                                  child: Text(
+                                    "Forgot Password",
+                                    style: TextStyle(
+                                      color: colorScheme.secondary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(height: 32),
-                            AnimatedLoginButton(), // Use the AnimatedLoginButton class from earlier
-                            SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                Get.to(() => const SignupView());
-                                // TODO: Navigate to sign-up screen
-                              },
-                              child: Text('Sign Up'),
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: colorScheme.onPrimary, backgroundColor: colorScheme.primary, // Use the onPrimary color for text
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.to(() => const SignupView());
+                                  },
+                                  child: Text(
+                                    "Don't have an account? Sign up",
+                                    style: TextStyle(
+                                      color: colorScheme.primary,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            TextButton(
-                              onPressed: () {
-                                Get.to(() => const SignupView());
-                                // TODO: Navigate to sign-up screen
-                              },
-                              child: Text(
-                                "Don't have an account? Sign up",
-                                style: TextStyle(
-                                  color: colorScheme.primary,
-                                ),
-                              ),
-                            ),
+                              ],
+                            )
+
+
                           ],
                         ),
                       ),
@@ -144,7 +147,6 @@ class LoginView extends StatelessWidget {
 
 
 // Include the AnimatedLoginButton class here
-
 class AnimatedLoginButton extends StatefulWidget {
   const AnimatedLoginButton({super.key});
 
@@ -155,6 +157,7 @@ class AnimatedLoginButton extends StatefulWidget {
 class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _offsetAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
@@ -171,6 +174,14 @@ class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTi
       curve: Curves.easeOut, // A curve that starts quickly and ends slowly
     ));
 
+    _scaleAnimation = Tween<double>(
+      begin: 0.8, // Start scale
+      end: 1.0, // End scale
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
     _animationController.forward(); // Start the animation
   }
 
@@ -184,14 +195,19 @@ class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTi
   Widget build(BuildContext context) {
     return SlideTransition(
       position: _offsetAnimation,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: StadiumBorder(), // Rounded corners for the button
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(), // Rounded corners for the button
+            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+          ),
+          onPressed: () {
+            // TODO: Implement login functionality
+            Get.to(const HomeView());
+          },
+          child: const Text("Login"),
         ),
-        onPressed: () {
-          // TODO: Implement login functionality
-        },
-        child: const Text("Login"),
       ),
     );
   }

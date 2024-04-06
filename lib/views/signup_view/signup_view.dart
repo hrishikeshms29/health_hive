@@ -49,83 +49,77 @@ class SignupView extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Card(
-          elevation: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
-              padding: EdgeInsets.zero,
-              color: colorScheme.background,
-              child: Column(
-                children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-                  Center(
-                    child: Image.asset(logo, width: 200), // Replace with your logo asset path
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Card(
-                      elevation: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Form(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomTextField(
-                                hint: "Enter your Email",
-                                icon: Icons.email,
-                              ),
-                              SizedBox(height: 16),
-                              CustomTextField(
-                                hint: "Enter your Password",
-                                icon: Icons.lock,
-                              ),
-                              SizedBox(height: 16),
-                              CustomTextField(
-                                hint: "Confirm your Password",
-                                icon: Icons.lock_outline,
-                              ),
-                              SizedBox(height: 32),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Get.to(HomeView());
-
-                                  // TODO: Implement sign-up functionality
-                                },
-                                child: Text('Sign Up'),
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: colorScheme.onPrimary,
-                                  backgroundColor: colorScheme.primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
+        child: Container(
+                padding: EdgeInsets.zero,
+                color: colorScheme.background,
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    Center(
+                      child: Image.asset(logo, width: 200), // Replace with your logo asset path
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Form(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomTextField(
+                                  hint: "Enter your Email",
+                                  icon: Icons.email,
+                                ),
+                                SizedBox(height: 16),
+                                CustomTextField(
+                                  hint: "Enter your Password",
+                                  icon: Icons.lock,
+                                ),
+                                SizedBox(height: 16),
+                                CustomTextField(
+                                  hint: "Confirm your Password",
+                                  icon: Icons.lock_outline,
+                                ),
+                                SizedBox(height: 32),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.to(HomeView());
+        
+                                    // TODO: Implement sign-up functionality
+                                  },
+                                  child: Text('Sign Up'),
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: colorScheme.onPrimary,
+                                    backgroundColor: colorScheme.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 16),
-                              TextButton(
-                                onPressed: () {
-                                  // TODO: Navigate to login screen
-                                  Get.to(LoginView());
-                                },
-                                child: Text(
-                                  "Already have an account? Log in",
-                                  style: TextStyle(
-                                    color: colorScheme.primary,
+                                SizedBox(height: 16),
+                                TextButton(
+                                  onPressed: () {
+                                    // TODO: Navigate to login screen
+                                    Get.to(LoginView());
+                                  },
+                                  child: Text(
+                                    "Already have an account? Log in",
+                                    style: TextStyle(
+                                      color: colorScheme.primary,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }

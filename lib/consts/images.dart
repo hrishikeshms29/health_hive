@@ -24,6 +24,7 @@ const icMenu = "assets/icons/o-hamburger.png";
 const icHeadphone = "assets/icons/headphone.png";
 const icHeart = "assets/icons/heart.png";
 const icHome = "assets/icons/home.png";
+const dricon = "assets/images/drIcon.png";
 const icLogin = "assets/icons/login.png";
 const icLogout = "assets/icons/logout.png";
 const icMessages = "assets/icons/messages.png";
@@ -49,6 +50,13 @@ const icTwitterLogo = "assets/icons/twitter_logo.png";
 const icWallet = "assets/icons/wallet.png";
 const icWhiteTick = "assets/icons/white_tick.png";
 const icWholeSale = "assets/icons/wholesale.png";
+
+const icLungs = "assets/icons/lungs.png";
+const icBody = "assets/icons/body.png";
+const icEar = "assets/icons/ear.jpeg";
+const icKidney = "assets/icons/kidney.png";
+const icnNose = "assets/icons/nose.jpeg";
+const icBone = "assets/icons/b2.png";
 
 //images
 

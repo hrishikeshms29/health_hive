@@ -1,3 +1,5 @@
+import 'package:health_hive/consts/consts.dart';
+
 const appname = "Health Hive";
 const appversion = "Version 1.0.0";
 const welcomeBack = "Welcome Back!";
@@ -15,3 +17,16 @@ const signup = "Signup";
 const alreadyHave = "Account have an account?";
 const dontHaveAccont = "Dont have an account ?";
 
+var iconList = [
+  icBody,
+  icEar,
+  icHeart,
+  icLungs,
+  icKidney,
+  icnNose,
+  icBone,
+];
+
+var iconTitleList = [
+  "Body","Ear","Heart","Lungs","Kidney","Nose","Bone"
+];
