@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:health_hive/consts/consts.dart';
 
 const appname = "Health Hive";
@@ -18,15 +19,19 @@ const alreadyHave = "Account have an account?";
 const dontHaveAccont = "Dont have an account ?";
 
 var iconList = [
-  icBody,
-  icEar,
-  icHeart,
-  icLungs,
-  icKidney,
-  icnNose,
-  icBone,
+  icHeart , icLungs , icBody , icEar, icKidney, icnNose ,icStomach , teeth , brain,
 ];
 
 var iconTitleList = [
-  "Body","Ear","Heart","Lungs","Kidney","Nose","Bone"
+  "HEART","LUNGS","BODY","EARS","Kidney","Nose","STOMACH","TEETH","BRAIN"
+];
+
+var settingsList = [
+  "CHANGE PASSWORD","TERMS & CONDITIONS", "SIGN OUT"
+];
+
+var settingsListIcon = [
+  Icons.lock,
+  Icons.note,
+  Icons.logout_rounded
 ];

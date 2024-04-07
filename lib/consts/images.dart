@@ -22,7 +22,7 @@ const icFlashDeal = "assets/icons/flash_deal.png";
 const icGoogleLogo = "assets/icons/google_logo.png";
 const icMenu = "assets/icons/o-hamburger.png";
 const icHeadphone = "assets/icons/headphone.png";
-const icHeart = "assets/icons/heart.png";
+
 const icHome = "assets/icons/home.png";
 const dricon = "assets/images/drIcon.png";
 const icLogin = "assets/icons/login.png";
@@ -51,12 +51,15 @@ const icWallet = "assets/icons/wallet.png";
 const icWhiteTick = "assets/icons/white_tick.png";
 const icWholeSale = "assets/icons/wholesale.png";
 
-const icLungs = "assets/icons/lungs.png";
+const icHeart = "assets/icons/heart.png";
+const icLungs = "assets/icons/lung.png";
 const icBody = "assets/icons/body.png";
-const icEar = "assets/icons/ear.jpeg";
+const icEar = "assets/icons/ears.png";
 const icKidney = "assets/icons/kidney.png";
-const icnNose = "assets/icons/nose.jpeg";
-const icBone = "assets/icons/b2.png";
+const icnNose = "assets/icons/nose.png";
+const icStomach = "assets/icons/stomach.png";
+const teeth = "assets/icons/teeth.png";
+const brain = "assets/icons/brain.png";
 
 //images
 
