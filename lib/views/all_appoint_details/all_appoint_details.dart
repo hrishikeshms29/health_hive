@@ -19,7 +19,6 @@ class AllAppointDetails extends StatelessWidget {
     required this.randomNumber, // Initialize randomNumber field
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,24 +54,27 @@ class AllAppointDetails extends StatelessWidget {
           onPressed: () {
             // Handle joining the meeting
             DateTime currentDateTime = DateTime.now();
-            DateTime appointmentStartDateTime = _parseTime(appointmentDay, appointmentTime.split(' - ')[0]);
-            DateTime appointmentEndDateTime = _parseTime(appointmentDay, appointmentTime.split(' - ')[1]);
-            if (currentDateTime.isAfter(appointmentStartDateTime) && currentDateTime.isBefore(appointmentEndDateTime)) {
+            DateTime appointmentStartDateTime =
+                _parseTime(appointmentDay, appointmentTime.split(' - ')[0]);
+            DateTime appointmentEndDateTime =
+                _parseTime(appointmentDay, appointmentTime.split(' - ')[1]);
+            if (currentDateTime.isAfter(appointmentStartDateTime) &&
+                currentDateTime.isBefore(appointmentEndDateTime)) {
               // JitsiMeetMethods.createMeeting(roomName: randomNumber.toString() ,isAudioMuted: true,isVideoMuted: true);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => JMeet(roomId: randomNumber.toString(), userName: doctorName)
-                      // CallPage(callID: "1",userName: doctorName)
-                  // VideoMeetingPage(
-                  // doctorName: doctorName,
-                  // appointmentDay: appointmentDay,
-                  // appointmentStartTime: appointmentTime.split(' - ')[0],
-                  // appointmentEndTime: appointmentTime.split(' - ')[1],
-                  // randomNumber: ,
-                // ),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => JMeet(roomId: randomNumber.toString(), userName: doctorName)
+              //         // CallPage(callID: "1",userName: doctorName)
+              //     // VideoMeetingPage(
+              //     // doctorName: doctorName,
+              //     // appointmentDay: appointmentDay,
+              //     // appointmentStartTime: appointmentTime.split(' - ')[0],
+              //     // appointmentEndTime: appointmentTime.split(' - ')[1],
+              //     // randomNumber: ,
+              //   // ),
+              //   ),
+              // );
             } else {
               showDialog(
                 context: context,
@@ -123,6 +125,7 @@ class AllAppointDetails extends StatelessWidget {
       ],
     );
   }
+
   DateTime _parseTime(String day, String time) {
     return DateTime.parse('$day $time');
   }

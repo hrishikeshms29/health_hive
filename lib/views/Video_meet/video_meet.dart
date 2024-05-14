@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zego_express_engine/zego_express_engine.dart';
 
 class VideoMeetingPage extends StatefulWidget {
   final String doctorName;
@@ -71,7 +70,6 @@ class _VideoMeetingPageState extends State<VideoMeetingPage> {
       appBar: AppBar(
         title: Text('Video Meeting with ${widget.doctorName}'),
       ),
-
     );
   }
 

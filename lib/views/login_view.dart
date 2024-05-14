@@ -56,7 +56,8 @@ class LoginView extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.2),
             Center(
-              child: Image.asset(logo, width: 200), // Replace with your logo asset path
+              child: Image.asset(logo,
+                  width: 200), // Replace with your logo asset path
             ),
             Expanded(
               flex: 2,
@@ -108,6 +109,7 @@ class LoginView extends StatelessWidget {
                                     "Don't have an account? Sign up",
                                     style: TextStyle(
                                       color: colorScheme.primary,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
@@ -131,13 +133,15 @@ class LoginView extends StatelessWidget {
 class AnimatedLoginButton extends StatefulWidget {
   final AuthController controller;
 
-  const AnimatedLoginButton({Key? key, required this.controller}) : super(key: key);
+  const AnimatedLoginButton({Key? key, required this.controller})
+      : super(key: key);
 
   @override
   State<AnimatedLoginButton> createState() => _AnimatedLoginButtonState();
 }
 
-class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTickerProviderStateMixin {
+class _AnimatedLoginButtonState extends State<AnimatedLoginButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _offsetAnimation;
   late Animation<double> _scaleAnimation;
@@ -183,7 +187,8 @@ class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTi
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
-            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
           ),
           onPressed: () async {
             String email = widget.controller.emailController.text.trim();

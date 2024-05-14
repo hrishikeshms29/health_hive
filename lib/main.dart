@@ -6,25 +6,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 // Add the import for ZegoExpressEngine
-import 'package:zego_express_engine/zego_express_engine.dart';
 
 void main() async {
   // Initialize ZegoExpressEngine
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize ZegoExpressEngine
-  ZegoEngineProfile profile = ZegoEngineProfile(
-    491061320, // Replace with your actual AppID
-    ZegoScenario.General,
-    enablePlatformView: true,
-  );
-
-  // Create a ZegoExpressEngine instance with the defined profile
-  await ZegoExpressEngine.createEngineWithProfile(profile);
-
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
