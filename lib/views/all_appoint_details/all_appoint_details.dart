@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:health_hive/views/call/call.dart';
+import '../../res/meet/meet.dart';
+import '../Video_meet/video_meet.dart';
 
-class All_appoint_details extends StatelessWidget {
-  const All_appoint_details({Key? key}) : super(key: key);
+class AllAppointDetails extends StatelessWidget {
+  final String doctorName;
+  final String appointmentDay;
+  final String appointmentTime;
+  final String message;
+  final int randomNumber; // Include randomNumber field
+
+  const AllAppointDetails({
+    Key? key,
+    required this.doctorName,
+    required this.appointmentDay,
+    required this.appointmentTime,
+    required this.message,
+    required this.randomNumber, // Initialize randomNumber field
+  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +37,13 @@ class All_appoint_details extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildStatusIndicator('Canceled'), // Change status here
+              _buildAppointmentDetail('Doctor Name', doctorName),
               SizedBox(height: 20),
-              _buildAppointmentDetail('Appointment Day', 'Monday, April 18, 2024'),
+              _buildAppointmentDetail('Appointment Day', appointmentDay),
               SizedBox(height: 20),
-              _buildAppointmentDetail('Appointment Time', '10:00 AM'),
+              _buildAppointmentDetail('Appointment Time', appointmentTime),
               SizedBox(height: 20),
-              _buildAppointmentDetail('Mobile Number', '+1 (123) 456-7890'),
-              SizedBox(height: 20),
-              _buildAppointmentDetail('Full Name', 'John Doe'),
-              SizedBox(height: 20),
-              _buildAppointmentDetail(
-                'Message',
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-              ),
+              _buildAppointmentDetail('Message', message),
               SizedBox(height: 20),
             ],
           ),
@@ -44,37 +54,46 @@ class All_appoint_details extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Handle joining the meeting
+            DateTime currentDateTime = DateTime.now();
+            DateTime appointmentStartDateTime = _parseTime(appointmentDay, appointmentTime.split(' - ')[0]);
+            DateTime appointmentEndDateTime = _parseTime(appointmentDay, appointmentTime.split(' - ')[1]);
+            if (currentDateTime.isAfter(appointmentStartDateTime) && currentDateTime.isBefore(appointmentEndDateTime)) {
+              // JitsiMeetMethods.createMeeting(roomName: randomNumber.toString() ,isAudioMuted: true,isVideoMuted: true);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => JMeet(roomId: randomNumber.toString(), userName: doctorName)
+                      // CallPage(callID: "1",userName: doctorName)
+                  // VideoMeetingPage(
+                  // doctorName: doctorName,
+                  // appointmentDay: appointmentDay,
+                  // appointmentStartTime: appointmentTime.split(' - ')[0],
+                  // appointmentEndTime: appointmentTime.split(' - ')[1],
+                  // randomNumber: ,
+                // ),
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Error'),
+                    content: Text('The appointment time has not arrived yet.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
           },
           child: Text('Join Meeting'),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusIndicator(String status) {
-    Color indicatorColor = Colors.green;
-    switch (status) {
-      case 'Canceled':
-        indicatorColor = Colors.red;
-        break;
-      case 'Upcoming':
-        indicatorColor = Colors.orange;
-        break;
-      case 'Completed':
-        indicatorColor = Colors.green;
-        break;
-    }
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: indicatorColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Text(
-        status,
-        style: TextStyle(
-          color: indicatorColor,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -100,7 +119,11 @@ class All_appoint_details extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+        SizedBox(height: 20),
       ],
     );
+  }
+  DateTime _parseTime(String day, String time) {
+    return DateTime.parse('$day $time');
   }
 }

@@ -24,7 +24,7 @@ class Category extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                Get.to(() => const CategoryDetailsView());
+                Get.to(() => CategoryDetailsView(categoryName: iconTitleList[index]));
                 // Handle category tap
               },
               child: AnimatedContainer(

@@ -1,67 +1,120 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:health_hive/views/all_appoint_details/all_appoint_details.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
+import '../all_appoint_details/all_appoint_details.dart';
+// import 'all_appoint_details.dart'; // Import your All_appoint_details page
 
-class All_Appoint extends StatefulWidget {
-  const All_Appoint({Key? key});
+class PatientAppointments extends StatefulWidget {
+  const PatientAppointments({Key? key});
 
   @override
-  State<All_Appoint> createState() => _All_AppointState();
+  State<PatientAppointments> createState() => _PatientAppointmentsState();
 }
 
-class _All_AppointState extends State<All_Appoint> {
+class _PatientAppointmentsState extends State<PatientAppointments> {
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Appointments'),
+        title: Text('Patient Appointments'),
       ),
-      body: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage('assets/logo.png'), // Replace with your logo asset path
-                ),
-                title: Text(
-                  'Doctor Name',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text('Time'),
-                trailing: GestureDetector(
-                  onTap: () {
-                    Get.to(() => All_appoint_details());
-                    // Navigate to All_appoint_details page
-                     // Assuming All_appoint_details is a StatefulWidget
+      body: Column(
+        children: [
+          TableCalendar(
+            firstDay: DateTime.utc(2010, 10, 16),
+            lastDay: DateTime.utc(2030, 3, 14),
+            focusedDay: _focusedDay,
+            calendarFormat: _calendarFormat,
+            selectedDayPredicate: (day) {
+              return isSameDay(_selectedDay, day);
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay;
+              });
+            },
+            onPageChanged: (focusedDay) {
+              _focusedDay = focusedDay;
+            },
+          ),
+          if (_selectedDay != null)
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('allAppointments')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .collection(DateFormat('yyyy-MM-dd').format(_selectedDay!))
+                  .snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
 
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple, // Change the color as needed
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      'View Details',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading");
+                }
+
+                return Expanded(
+                  child: ListView(
+                    children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                      return FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance.collection('doctors').doc(document['doctorId']).get(),
+                        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator(); // Show a loading spinner while waiting for data
+                          } else if (snapshot.hasError) {
+                            return Text("Error: ${snapshot.error}"); // Show error message if something went wrong
+                          } else {
+                            Map<String, dynamic> doctorData = snapshot.data!.data() as Map<String, dynamic>;
+                            // String? patientName = doctorData['patientName'];
+                            return Card(
+                              elevation: 2,
+                              margin: EdgeInsets.all(8),
+                              child: ListTile(
+                                leading: Icon(Icons.event_available, color: Colors.green),
+                                title: Text(
+                                  '${doctorData['name']} (${doctorData['specialization']})',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(document['appointmentTime']),
+                                trailing: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AllAppointDetails(
+                                          doctorName: doctorData['name'],
+                                          // patientName: doctorData['patientName'],
+                                          appointmentDay: DateFormat('yyyy-MM-dd').format(_selectedDay!),
+                                          appointmentTime: document['appointmentTime'],
+                                          message: document['message'],
+                                          randomNumber: document['randomNumber'], // Pass the randomNumber field
+                                          // status: document['status'] ?? 'Upcoming', // Set a default status if not available
+                                        ),
+                                      ),
+                                    );
+                                  },
+
+                                  child: Text('More Details'),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    }).toList(),
                   ),
-                ),
-              ),
+                );
+
+              },
             ),
-          );
-        },
+        ],
       ),
     );
   }

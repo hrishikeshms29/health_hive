@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_hive/consts/consts.dart';
+import 'package:health_hive/controllers/auth_controller.dart';
+import 'package:health_hive/views/lo.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -59,6 +62,10 @@ class _ProfileState extends State<Profile> {
                   child: InkWell(
                     onTap: () {
                       // Handle tap
+                      if(index == 2){
+                        AuthController().signout();
+                        Get.offAll(()=>LoginView());
+                      }
                     },
                     child: ListTile(
                       leading: Icon(

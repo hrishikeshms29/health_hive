@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:health_hive/consts/consts.dart';
 import 'package:health_hive/res/components/custom_textfield.dart';
 import 'package:health_hive/views/home_view/home_view.dart';
 import 'package:health_hive/views/signup_view/signup_view.dart';
+import '../controllers/auth_controller.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,12 @@ class MyApp extends StatelessWidget {
       title: 'Health Hive',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.deepPurple,
+        ).copyWith(
           brightness: Brightness.light,
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headline1: TextStyle(
             fontFamily: 'Serif',
             fontWeight: FontWeight.bold,
@@ -40,16 +41,16 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  const LoginView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
-
+    var controller = Get.put(AuthController());
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.zero,
         color: colorScheme.background,
         child: Column(
           children: [
@@ -72,32 +73,18 @@ class LoginView extends StatelessWidget {
                           children: [
                             CustomTextField(
                               hint: "Enter your Email",
-                              icon: Icons.email, // Add email icon
+                              icon: Icons.email,
+                              textController: controller.emailController,
                             ),
                             SizedBox(height: 16),
                             CustomTextField(
                               hint: "Please enter your Password",
-                              icon: Icons.lock, // Add lock icon
+                              icon: Icons.lock,
+                              textController: controller.passwordController,
                             ),
-
                             SizedBox(height: 32),
-
-                            AnimatedLoginButton(), // Use the AnimatedLoginButton class from earlier
+                            AnimatedLoginButton(controller: controller),
                             SizedBox(height: 32),
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     Get.to(() => const SignupView());
-                            //   },
-                            //   child: Text('Sign Up'),
-                            //   style: ElevatedButton.styleFrom(
-                            //     foregroundColor: colorScheme.onPrimary, backgroundColor: colorScheme.primary,
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(30.0),
-                            //     ),
-                            //     padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-                            //   ),
-                            // ),0
-                            // SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -126,8 +113,6 @@ class LoginView extends StatelessWidget {
                                 ),
                               ],
                             )
-
-
                           ],
                         ),
                       ),
@@ -143,12 +128,10 @@ class LoginView extends StatelessWidget {
   }
 }
 
-// Include the AnimatedLoginButton class here
-
-
-// Include the AnimatedLoginButton class here
 class AnimatedLoginButton extends StatefulWidget {
-  const AnimatedLoginButton({super.key});
+  final AuthController controller;
+
+  const AnimatedLoginButton({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<AnimatedLoginButton> createState() => _AnimatedLoginButtonState();
@@ -163,31 +146,31 @@ class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTi
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(seconds: 1), // Duration for the slide animation
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
     _offsetAnimation = Tween<Offset>(
-      begin: const Offset(-1.0, 0.0), // Start from the left side
-      end: Offset.zero, // End at its final position
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut, // A curve that starts quickly and ends slowly
-    ));
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.8, // Start scale
-      end: 1.0, // End scale
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeOut,
     ));
 
-    _animationController.forward(); // Start the animation
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
+    _animationController.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose(); // Dispose the controller when the widget is removed
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -199,12 +182,14 @@ class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTi
         scale: _scaleAnimation,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            shape: const StadiumBorder(), // Rounded corners for the button
+            shape: const StadiumBorder(),
             padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
           ),
-          onPressed: () {
-            // TODO: Implement login functionality
-            Get.to(const HomeView());
+          onPressed: () async {
+            String email = widget.controller.emailController.text.trim();
+            String password = widget.controller.passwordController.text.trim();
+            await widget.controller.login(email, password);
+            // Get.to(const HomeView());
           },
           child: const Text("Login"),
         ),
@@ -212,5 +197,3 @@ class _AnimatedLoginButtonState extends State<AnimatedLoginButton> with SingleTi
     );
   }
 }
-
-// Include the AnimatedLoginButton class here
